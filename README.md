@@ -156,6 +156,7 @@ python3 backend/app.py
 ## Track
 
 **Observability** — Splunk Agentic Ops Hackathon 2026
+
 Blast Radius Prophet lives in Observability because it focuses on **early anomaly detection, system behavior understanding, and pre-incident impact prediction**, not security alerts.
 
 ---
