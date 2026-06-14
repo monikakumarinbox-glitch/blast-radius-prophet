@@ -12,6 +12,14 @@ Most teams only understand the impact of an incident *after* it happens. A datab
 
 ---
 
+## What It Does (TL;DR)
+
+- Learns a live **service dependency graph** from Splunk logs and metrics — no CMDB or manual diagrams.
+- Uses **Splunk MCP + hosted models** to detect early anomalies and forecast the incident’s blast radius (services, regions, users at risk).
+- Prepares a **pre-incident playbook**: who to page first, one suggested mitigation, and a drafted Slack / ticket message for human approval.
+
+---
+
 ## How It Works
 
 Three AI agents run in sequence, all powered by the **Splunk MCP Server** (`splunk_run_query` tool):
@@ -25,12 +33,13 @@ Comm-Officer Agent → pre-drafts Slack alert + incident ticket + mitigation
 The key innovation: the service dependency graph is inferred entirely from **actual observed traffic patterns** in Splunk logs using SPL — not from stale CMDBs or manually maintained runbooks.
 
 A human operator reviews the pre-drafted alert and approves or dismisses with one click (**human-in-the-loop**).
+This means teams can **understand system behavior**, **detect anomalies earlier**, and **respond based on real business impact**, not just raw error rates.
 
 ---
 
 ## Architecture
 
-See `architecture_diagram.png` at the root of this repo.
+![Blast Radius Prophet Architecture](architecture_diagram.png)
 
 ```
 Splunk Enterprise (local)
@@ -54,9 +63,10 @@ Browser UI (human-in-the-loop approval)
 
 | Capability | How used |
 |---|---|
-| **Splunk MCP Server** | All agent queries via `splunk_run_query` tool over StreamableHTTP |
-| **Splunk Python SDK** | Connection management and search execution |
-| **SPL queries** | Dependency graph inference + anomaly detection |
+| **Splunk MCP Server** | All agent queries via `splunk_run_query` tool over StreamableHTTP (metrics, logs, service graph) |
+| **Splunk hosted models** | (Planned / optional) Forecast anomaly impact and help rank the most likely effective mitigation |
+| **AI agents (multi-agent workflow)** | Scout, Architect, and Comm-Officer coordinate detection, graph inference, and comms |
+| **SPL + Splunk Python SDK** | Dependency graph inference, anomaly detection, and data retrieval from Splunk |
 
 ### Key SPL Queries
 
@@ -146,6 +156,7 @@ python3 backend/app.py
 ## Track
 
 **Observability** — Splunk Agentic Ops Hackathon 2026
+Blast Radius Prophet lives in Observability because it focuses on **early anomaly detection, system behavior understanding, and pre-incident impact prediction**, not security alerts.
 
 ---
 
